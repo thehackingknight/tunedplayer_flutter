@@ -16,3 +16,16 @@ Widget T_Marquee(text,
     ),
   );
 }
+
+Widget SizedText(String txt, TextStyle style, {double h = 22, double w = 250}) {
+  return SizedBox(
+    width: w,
+    height: h,
+    child: Text(
+      txt,
+      style: style,
+      overflow: TextOverflow.ellipsis,
+      softWrap: false,
+    ),
+  );
+}
