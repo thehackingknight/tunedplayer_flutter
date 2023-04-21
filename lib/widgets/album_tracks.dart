@@ -9,7 +9,6 @@ import 'package:tunedplayer/widgets/track_item.dart';
 import '../models/provider_store.dart';
 
 class AlbumTracks extends StatefulWidget {
-
   final AlbumModel album;
   const AlbumTracks({super.key, required this.album});
 
@@ -18,9 +17,22 @@ class AlbumTracks extends StatefulWidget {
 }
 
 class _AlbumTracksState extends State<AlbumTracks> {
+  late TPlayerState _playerState;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      //Set current playlist
+      _playerState.setCurrPlaylist(_playerState.playlist
+          .where((it) => it.albumId == widget.album.id)
+          .toList());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _playerStateWatcher = context.watch<TPlayerState>();
+    _playerState = context.watch<TPlayerState>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -28,16 +40,16 @@ class _AlbumTracksState extends State<AlbumTracks> {
           Row(
             children: [
               Text(widget.album.album),
-              Text("${_playerStateWatcher.useCurrPlaylist}"),
+              Text("${_playerState.useCurrPlaylist}"),
             ],
           ),
           Expanded(
             child: Scrollbar(
               child: ListView.builder(
-                  itemCount: _playerStateWatcher.playlist.length,
+                  itemCount: _playerState.currPlaylist.length,
                   itemBuilder: ((context, index) {
                     return TrackItem(
-                        index: index, playlist: _playerStateWatcher.playlist.where((element) => element.albumId == widget.album.id).toList());
+                        index: index, playlist: _playerState.currPlaylist);
                   })),
             ),
           )

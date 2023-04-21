@@ -54,8 +54,7 @@ class _PlayerViewState extends State<PlayerView> {
           // Metadata to display in the notification:
           album: it.album,
           title: it.title,
-          artUri: Uri.parse(
-              dummyImg),
+          artUri: Uri.parse(dummyImg),
         ),
       );
       _children.add(audioSource);
@@ -71,7 +70,7 @@ class _PlayerViewState extends State<PlayerView> {
         children: _children,
       );
 
-      _playerStateWatcher.setCurrTrack(playlist[0]);
+      //_playerStateWatcher.setCurrTrack(playlist[0]);
       _playerStateWatcher.setPlaylist(playlist);
       if (Platform.isAndroid &&
           _playerStateWatcher.player.audioSource == null) {
@@ -87,8 +86,6 @@ class _PlayerViewState extends State<PlayerView> {
                     });
                   })
                 });
-
-
 
         newAudioPlayer.durationStream.listen((val) {
           if (val != null) {

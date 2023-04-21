@@ -40,6 +40,7 @@ class TPlayerState extends ChangeNotifier {
     _isPlaying = val;
     notifyListeners();
   }
+
   bool _useCurrPlaylist = false;
   bool get useCurrPlaylist => _useCurrPlaylist;
   void setUseCurrPlaylist(bool val) {
@@ -73,6 +74,7 @@ class TPlayerState extends ChangeNotifier {
     _playlist = val;
     notifyListeners();
   }
+
   List<TrackSchema> _currPlaylist = List.empty();
   List<TrackSchema> get currPlaylist => _currPlaylist;
   void setCurrPlaylist(List<TrackSchema> val) {
@@ -80,7 +82,7 @@ class TPlayerState extends ChangeNotifier {
 
     List<AudioSource> _children = List.empty(growable: true);
     late ConcatenatingAudioSource source;
-    for (var it in val){
+    for (var it in val) {
       //Iterate through new playlist
       AudioSource audioSource = AudioSource.uri(
         Uri.parse(it.path!),
@@ -90,8 +92,7 @@ class TPlayerState extends ChangeNotifier {
           // Metadata to display in the notification:
           album: it.album,
           title: it.title,
-          artUri: Uri.parse(
-              dummyImg),
+          artUri: Uri.parse(dummyImg),
         ),
       );
 
@@ -105,8 +106,14 @@ class TPlayerState extends ChangeNotifier {
       // Specify the playlist items
       children: _children,
     );
-    _player.setAudioSource(source);
-    _currTrack = val[0];
+
+    if (val.isNotEmpty) {
+      _player.setAudioSource(source);
+      _player.seek(Duration.zero, index: 0);
+      print("Setting current track to ${val[0].title}");
+      _currTrack = val[0];
+    }
+
     notifyListeners();
   }
 

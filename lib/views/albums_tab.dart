@@ -37,84 +37,82 @@ class _AlbumsTabState extends State<AlbumsTab> {
     const numGrids = 10;
     const numRows = 3;
     return NotificationListener(
-        onNotification: (SizeChangedLayoutNotification notification) {
-          Future.delayed(Duration(milliseconds: 300), () {
-            print('size changed');
-            var screenW = MediaQuery.of(context).size.width;
-            context.read<AppState>().setScreenWidth(screenW);
-          });
-          return true;
-        },
-        child: SizeChangedLayoutNotifier(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: GridView.builder(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: numRows,
-                      crossAxisSpacing: 5.0,
-                      mainAxisSpacing: 60.0,
-                    ),
-                    itemCount: _playerStateWatcher.albums.length,
-                    itemBuilder: (context, index) {
-                      double screenWidth = MediaQuery.of(context).size.width;
-                      double imgWidth =
-                          screenWidth * 0.31666666666666665; //152px ref=480;
-                      var album = _playerStateWatcher.albums[index];
-                      return Wrap(children: [
-                        Container(
-                          color: Colors.black26,
-                          //height: 200,
-                          child: InkWell(
-                            onTap: () {
-                              _playerStateWatcher.setUseCurrPlaylist(true);
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlbumTracks(album: album);
-                                  });
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: imgWidth, //152px ref=480
-                                  height: imgWidth,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4),
-                                      color: Colors.black26),
-                                  child: Image.asset("assets/images/pistol.jpg"),
+      onNotification: (SizeChangedLayoutNotification notification) {
+        Future.delayed(Duration(milliseconds: 300), () {
+          print('size changed');
+          var screenW = MediaQuery.of(context).size.width;
+          context.read<AppState>().setScreenWidth(screenW);
+        });
+        return true;
+      },
+      child: SizeChangedLayoutNotifier(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: GridView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: numRows,
+                    crossAxisSpacing: 5.0,
+                    mainAxisSpacing: 60.0,
+                  ),
+                  itemCount: _playerStateWatcher.albums.length,
+                  itemBuilder: (context, index) {
+                    double screenWidth = MediaQuery.of(context).size.width;
+                    double imgWidth =
+                        screenWidth * 0.31666666666666665; //152px ref=480;
+                    var album = _playerStateWatcher.albums[index];
+                    return Wrap(children: [
+                      Container(
+                        color: Colors.black26,
+                        //height: 200,
+                        child: InkWell(
+                          onTap: () {
+                            _playerStateWatcher.setUseCurrPlaylist(true);
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return AlbumTracks(album: album);
+                                });
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                width: imgWidth, //152px ref=480
+                                height: imgWidth,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    color: Colors.black26),
+                                // child: Image.asset("assets/images/pistol.jpg"),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Column(
+                                  children: [
+                                    SizedText(
+                                        album.album,
+                                        const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16)),
+                                    SizedText(album.artist!, TextStyle())
+                                  ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Column(
-                                    children: [
-                                      SizedText(
-                                          album.album,
-                                          const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16)),
-                                      SizedText(album.artist!, TextStyle())
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                      ]);
-                    },
-                  ),
-
-                )
-                ],
-            ),
+                      ),
+                    ]);
+                  },
+                ),
+              )
+            ],
           ),
         ),
-      );
-
+      ),
+    );
   }
 }
