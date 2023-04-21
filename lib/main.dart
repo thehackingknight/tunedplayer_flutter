@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+import 'package:tunedplayer/models/provider_store.dart';
 import 'package:tunedplayer/views/library_page.dart';
 import 'package:tunedplayer/views/player_view.dart';
-import 'package:tunedplayer/views/tracks_page.dart';
-
+import 'package:tunedplayer/views/test_app.dart';
+import 'package:tunedplayer/widgets/navmenu.dart';
 import 'constants/index.dart';
+import "constants/globals.dart" as globals;
 
 Future<void> main() async {
+  //HIVE
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
     androidNotificationChannelName: 'Audio playback',
@@ -21,7 +24,10 @@ Future<void> main() async {
     // Either the permission was already granted before or the user just granted it.
     debugPrint("$TAG STORAGE PERMISSION GRANTED");
   }
-  runApp(const Root());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => AppState()),
+    ChangeNotifierProvider(create: (_) => TPlayerState()),
+  ], child: const Root()));
 }
 
 class Root extends StatelessWidget {
@@ -32,7 +38,10 @@ class Root extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.dark(useMaterial3: true),
       home: Stack(
-        children: const [MyApp(), PlayerView()],
+        children: const [
+          MyApp(),
+          PlayerView(),
+        ],
       ),
     );
   }
@@ -60,6 +69,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    var _winW = MediaQuery.of(context).size.width;
     return MaterialApp(
         title: 'TunedPlayer',
         theme: ThemeData.dark(useMaterial3: true),
@@ -68,15 +78,23 @@ class _MyAppState extends State<MyApp> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  IconButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) => const NavMenu());
+                    },
+                    icon: const Icon(CupertinoIcons.bars),
+                  ),
                   Row(
                     children: [
                       const Text(
                         "device files",
-                        style: TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 16),
                       ),
                       SizedBox(
-                        width: 30,
-                        height: 23,
+                        width: 35,
+                        height: 25,
                         child: FittedBox(
                           fit: BoxFit.fill,
                           child: Switch(
@@ -96,16 +114,6 @@ class _MyAppState extends State<MyApp> {
                     onPressed: () {},
                     icon: const Icon(CupertinoIcons.ellipsis_vertical),
                     iconSize: 20,
-                  )
-                ],
-              ),
-            ),
-            drawer: Drawer(
-              width: 200,
-              child: ListView(
-                children: const [
-                  ListTile(
-                    title: Text("Home"),
                   )
                 ],
               ),
@@ -150,13 +158,39 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("Home Page"),
+    return Center(
+      child: ElevatedButton(
+        child: Text("TunedPlayer"),
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => const Center(
+              child: Text("Menu"),
+            ),
+          );
+        },
+      ),
     );
   }
 }
