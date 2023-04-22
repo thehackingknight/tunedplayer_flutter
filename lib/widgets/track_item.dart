@@ -20,7 +20,7 @@ class TrackItem extends StatefulWidget {
 class _TrackItemState extends State<TrackItem> {
   @override
   Widget build(BuildContext context) {
-    final TPlayerState _playerStateWatcher = context.watch();
+    final TPlayerState _playerState = context.watch();
     var playlist = widget.playlist;
     final index = widget.index;
     String artist = playlist[index].artist != null
@@ -35,15 +35,22 @@ class _TrackItemState extends State<TrackItem> {
               width: 20,
               child: Icon(
                 CupertinoIcons.music_note,
-                color: _playerStateWatcher.player.currentIndex == index
+                color: _playerState.player.currentIndex == index
                     ? orange
                     : Colors.white70,
               )),
           InkWell(
             borderRadius: BorderRadius.circular(10),
             onTap: () {
-              _playerStateWatcher.setCurrTrack(playlist[index]);
-              _playerStateWatcher.player.seek(Duration.zero, index: index);
+              _playerState.setCurrIndex(index);
+              //_playerStateWatcher.setCurrTrack(playlist[index]);
+              if (!_playerState.useCurrPlaylist &&
+                  _playerState.currPlaylist != _playerState.playlist) {
+                //Playing tracks from songs tab AKA all tracks
+                _playerState.setCurrPlaylist(_playerState.playlist);
+              } else {
+                _playerState.player.seek(Duration.zero, index: index);
+              }
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

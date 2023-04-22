@@ -29,7 +29,7 @@ class _PlayerViewState extends State<PlayerView> {
   late TPlayerState _playerStateWatcher;
 
   final _audioQuery = OnAudioQuery();
-  List<AudioSource> _children = List.empty(growable: true);
+  final List<AudioSource> _children = List.empty(growable: true);
   late ConcatenatingAudioSource audioPlaylist;
 
   void getTracks() async {
@@ -70,34 +70,11 @@ class _PlayerViewState extends State<PlayerView> {
         children: _children,
       );
 
-      //_playerStateWatcher.setCurrTrack(playlist[0]);
       _playerStateWatcher.setPlaylist(playlist);
+      _playerStateWatcher.setCurrPlaylist(playlist);
+
       if (Platform.isAndroid &&
-          _playerStateWatcher.player.audioSource == null) {
-        AudioPlayer newAudioPlayer = AudioPlayer();
-        newAudioPlayer
-            .setAudioSource(audioPlaylist,
-                initialIndex: 0, initialPosition: Duration.zero)
-            .then((value) => {
-                  newAudioPlayer.playerStateStream.listen((state) {
-                    debugPrint("$TAG: STATE: $state");
-                    setState(() {
-                      _playerStateReader.setIsPlaying(state.playing);
-                    });
-                  })
-                });
-
-        newAudioPlayer.durationStream.listen((val) {
-          if (val != null) {
-            _playerStateReader.setDuration(val);
-          }
-        });
-
-        newAudioPlayer.positionStream.listen((val) {
-          _playerStateReader.setPosition(val);
-        });
-        _playerStateReader.setPlayer(newAudioPlayer);
-      }
+          _playerStateWatcher.player.audioSource == null) {}
     }
   }
 

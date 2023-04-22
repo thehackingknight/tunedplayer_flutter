@@ -109,9 +109,9 @@ class TPlayerState extends ChangeNotifier {
 
     if (val.isNotEmpty) {
       _player.setAudioSource(source);
-      _player.seek(Duration.zero, index: 0);
-      print("Setting current track to ${val[0].title}");
-      _currTrack = val[0];
+      _player.seek(Duration.zero, index: _currIndex);
+      print("Setting current track to ${val[_currIndex].title}");
+      _currTrack = val[_currIndex];
     }
 
     notifyListeners();
@@ -125,9 +125,12 @@ class TPlayerState extends ChangeNotifier {
   }
 
   AudioPlayer _player = AudioPlayer();
+
   AudioPlayer get player => _player;
+
   void setPlayer(AudioPlayer val) {
     _player = val;
+
     notifyListeners();
   }
 

@@ -31,7 +31,7 @@ class _AlbumsTabState extends State<AlbumsTab> {
 
   @override
   Widget build(BuildContext context) {
-    final TPlayerState _playerStateWatcher = context.watch();
+    final TPlayerState _playerState = context.watch();
     final AppState _appState = context.watch();
 
     const numGrids = 10;
@@ -59,24 +59,26 @@ class _AlbumsTabState extends State<AlbumsTab> {
                     crossAxisSpacing: 5.0,
                     mainAxisSpacing: 60.0,
                   ),
-                  itemCount: _playerStateWatcher.albums.length,
+                  itemCount: _playerState.albums.length,
                   itemBuilder: (context, index) {
                     double screenWidth = MediaQuery.of(context).size.width;
                     double imgWidth =
                         screenWidth * 0.31666666666666665; //152px ref=480;
-                    var album = _playerStateWatcher.albums[index];
+                    var album = _playerState.albums[index];
                     return Wrap(children: [
                       Container(
                         color: Colors.black26,
                         //height: 200,
                         child: InkWell(
                           onTap: () {
-                            _playerStateWatcher.setUseCurrPlaylist(true);
+                            _playerState.setUseCurrPlaylist(true);
                             showModalBottomSheet(
-                                context: context,
-                                builder: (context) {
-                                  return AlbumTracks(album: album);
-                                });
+                                    context: context,
+                                    builder: (context) {
+                                      return AlbumTracks(album: album);
+                                    })
+                                .whenComplete(() =>
+                                    _playerState.setUseCurrPlaylist(false));
                           },
                           child: Column(
                             children: [

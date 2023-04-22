@@ -30,11 +30,49 @@ Future<void> main() async {
   ], child: const Root()));
 }
 
-class Root extends StatelessWidget {
+class Root extends StatefulWidget {
   const Root({super.key});
 
   @override
+  State<Root> createState() => _RootState();
+}
+
+class _RootState extends State<Root> {
+  late TPlayerState _playerState;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _playerState.player.playerStateStream.listen((state) {
+        debugPrint("$TAG: STATE: $state");
+        setState(() {
+          _playerState.setIsPlaying(state.playing);
+        });
+      });
+      _playerState.player.durationStream.listen((val) {
+        if (val != null) {
+          _playerState.setDuration(val);
+        }
+      });
+
+      _playerState.player.positionStream.listen((val) {
+        _playerState.setPosition(val);
+      });
+
+      _playerState.player.currentIndexStream.listen((val) {
+        if (val != null) {
+          _playerState.setCurrIndex(val);
+          _playerState.setCurrTrack(_playerState.currPlaylist[val]);
+        }
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _playerState = context.watch<TPlayerState>();
     return MaterialApp(
       theme: ThemeData.dark(useMaterial3: true),
       home: Stack(
@@ -70,6 +108,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     var _winW = MediaQuery.of(context).size.width;
+    final _playerState = context.watch<TPlayerState>();
     return MaterialApp(
         title: 'TunedPlayer',
         theme: ThemeData.dark(useMaterial3: true),
@@ -110,6 +149,7 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ],
                   ),
+                  Text(_playerState.useCurrPlaylist.toString()),
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(CupertinoIcons.ellipsis_vertical),

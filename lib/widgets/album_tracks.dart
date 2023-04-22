@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
+import 'package:tunedplayer/constants/styles.dart';
 import 'package:tunedplayer/widgets/track_item.dart';
 
 import '../models/provider_store.dart';
@@ -31,30 +32,41 @@ class _AlbumTracksState extends State<AlbumTracks> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _playerState = context.watch<TPlayerState>();
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Row(
+    return Column(
+      children: [
+        Container(
+          color: Colors.black26,
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(widget.album.album),
-              Text("${_playerState.useCurrPlaylist}"),
+              Text(widget.album.album,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 18)),
+              Text(_playerState.useCurrPlaylist.toString()),
+              const Icon(CupertinoIcons.ellipsis_vertical)
             ],
           ),
-          Expanded(
-            child: Scrollbar(
-              child: ListView.builder(
-                  itemCount: _playerState.currPlaylist.length,
-                  itemBuilder: ((context, index) {
-                    return TrackItem(
-                        index: index, playlist: _playerState.currPlaylist);
-                  })),
-            ),
-          )
-        ],
-      ),
+        ),
+        Expanded(
+          child: Scrollbar(
+            child: ListView.builder(
+                itemCount: _playerState.currPlaylist.length,
+                itemBuilder: ((context, index) {
+                  return TrackItem(
+                      index: index, playlist: _playerState.currPlaylist);
+                })),
+          ),
+        )
+      ],
     );
   }
 }
