@@ -40,33 +40,39 @@ class _AlbumTracksState extends State<AlbumTracks> {
   @override
   Widget build(BuildContext context) {
     _playerState = context.watch<TPlayerState>();
-    return Column(
-      children: [
-        Container(
-          color: Colors.black26,
-          padding: const EdgeInsets.all(8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(widget.album.album,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 18)),
-              Text(_playerState.useCurrPlaylist.toString()),
-              const Icon(CupertinoIcons.ellipsis_vertical)
-            ],
+    return Container(
+      color: Colors.black26,
+      child: Column(
+        children: [
+          Container(
+            color: Colors.black26,
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(widget.album.album,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: 18)),
+                const Icon(CupertinoIcons.ellipsis_vertical)
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: Scrollbar(
-            child: ListView.builder(
-                itemCount: _playerState.currPlaylist.length,
-                itemBuilder: ((context, index) {
-                  return TrackItem(
-                      index: index, playlist: _playerState.currPlaylist);
-                })),
-          ),
-        )
-      ],
+          Expanded(
+
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Scrollbar(
+                child: ListView.builder(
+                    itemCount: _playerState.currPlaylist.length,
+                    itemBuilder: ((context, index) {
+                      return TrackItem(
+                          index: index, playlist: _playerState.currPlaylist);
+                    })),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

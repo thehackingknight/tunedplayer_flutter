@@ -87,7 +87,8 @@ class _AlbumsTabState extends State<AlbumsTab> {
                                 height: imgWidth,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(4),
-                                    color: Colors.black26),
+                                    color: Colors.black),
+                                child: const Icon(CupertinoIcons.music_albums, size: 50,),
                                 // child: Image.asset("assets/images/pistol.jpg"),
                               ),
                               Padding(
@@ -95,11 +96,13 @@ class _AlbumsTabState extends State<AlbumsTab> {
                                 child: Column(
                                   children: [
                                     SizedText(
-                                        album.album,
-                                        const TextStyle(
+                                        txt: album.album,
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.w600,
-                                            fontSize: 16)),
-                                    SizedText(album.artist!, TextStyle())
+                                            fontSize: 16),
+                                    w: 250),
+                                    SizedText(
+                                       txt: album.artist!, style: TextStyle(), w: 250)// TODO
                                   ],
                                 ),
                               ),

@@ -107,8 +107,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    var _winW = MediaQuery.of(context).size.width;
     final _playerState = context.watch<TPlayerState>();
+    double screenW = MediaQuery.of(context).size.width;
     return MaterialApp(
         title: 'TunedPlayer',
         theme: ThemeData.dark(useMaterial3: true),
@@ -149,7 +149,7 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ],
                   ),
-                  Text(_playerState.useCurrPlaylist.toString()),
+                  Text( screenW.floor().toString()),
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(CupertinoIcons.ellipsis_vertical),

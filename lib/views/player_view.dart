@@ -107,16 +107,16 @@ class _PlayerViewState extends State<PlayerView> {
     _playerStateWatcher = context.watch<TPlayerState>();
     //aFTER BUILD
 
-    return Positioned(
+    return !_playerStateWatcher.useCurrPlaylist ? Positioned(
       bottom: 50,
       height: 60,
       width: winW,
       child: Card(
-        child: MinPlayer(),
-        color: Color.fromARGB(226, 15, 15, 15),
+        color: const Color.fromRGBO(11, 11, 11, 1),
         borderOnForeground: true,
+        child: MinPlayer(),
       ),
-    );
+    ) : Container();
   }
 
   Widget MinPlayer() {
@@ -136,13 +136,13 @@ class _PlayerViewState extends State<PlayerView> {
                 ? Column(
                     children: [
                       SizedText(
-                          _playerStateWatcher.currTrack!.title,
-                          const TextStyle(
+                          txt: _playerStateWatcher.currTrack!.title,
+                          style: const TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w500),
-                          w: 260,
+                          w: 260, // TODO
                           h: 20),
-                      SizedText("${_playerStateWatcher.currTrack!.artist}",
-                          const TextStyle(fontSize: 11),
+                      SizedText(txt:"${_playerStateWatcher.currTrack!.artist}",
+                          style: const TextStyle(fontSize: 11),
                           w: 260, h: 15)
                     ],
                   )

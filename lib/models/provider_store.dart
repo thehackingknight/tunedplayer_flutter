@@ -58,6 +58,7 @@ class TPlayerState extends ChangeNotifier {
     if (_player.currentIndex != val) {
       _player.seek(Duration.zero, index: val);
     }
+    if (val != 0 && !_player.playing) _player.play();
     notifyListeners();
   }
 

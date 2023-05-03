@@ -21,12 +21,14 @@ class _FullPlayerState extends State<FullPlayer> {
   Widget build(BuildContext context) {
     _playerStateReader = context.read<TPlayerState>();
     _playerStateWatcher = context.watch<TPlayerState>();
+    double _screenW = MediaQuery.of(context).size.width;
     return Container(
+      color: Colors.black26,
       padding: const EdgeInsets.fromLTRB(4, 4, 4, 4 + 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
             IconButton(
                 onPressed: () {},
                 icon: const Icon(
@@ -44,30 +46,42 @@ class _FullPlayerState extends State<FullPlayer> {
                 )),
           ]),
           Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _playerStateWatcher.currTrack != null
-                    ? Column(
-                        children: [
-                          SizedText(
-                              _playerStateWatcher.currTrack!.title,
-                              const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w600),
-                              h: 27),
-                          SizedText("${_playerStateWatcher.currTrack!.artist}",
-                              const TextStyle(fontSize: 15)),
-                          SizedText("${_playerStateWatcher.currTrack!.album}",
-                              const TextStyle(fontSize: 15)),
-                        ],
-                      )
-                    : Text("No track"),
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(CupertinoIcons.ellipsis_vertical))
-              ],
+            Container(
+              margin: EdgeInsets.only(left: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _playerStateWatcher.currTrack != null
+                      ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedText(
+                                txt: _playerStateWatcher.currTrack!.title,
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w600),
+                                w: .82 * _screenW,
+                                h: 27),
+                            SizedText(
+                                txt:"${_playerStateWatcher.currTrack!.artist}",
+                                style: const TextStyle(fontSize: 15),
+                                w: .82 * _screenW
+                            ),
+
+                            SizedText(
+                                txt: "${_playerStateWatcher.currTrack!.album}",
+                                style: const TextStyle(fontSize: 15),
+                            w: .82 * _screenW,),
+
+                          ],
+                        )
+                      : Text("No track"),
+                  IconButton(
+                      onPressed: () {},
+                      icon: const Icon(CupertinoIcons.ellipsis_vertical))
+                ],
+              ),
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               IconButton(
                   onPressed: () {},
                   icon: const Icon(
@@ -102,31 +116,34 @@ class _FullPlayerState extends State<FullPlayer> {
                     size: 18,
                   )),
             ]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  formatTime(_playerStateWatcher.position),
-                  style: const TextStyle(fontSize: 11),
-                ),
-                SizedBox(
-                    width: 230,
-                    child: ProgressBar(
-                      progress: _playerStateWatcher.position,
-                      total: _playerStateWatcher.duration,
-                      onSeek: (v) {
-                        _playerStateReader.player.seek(v);
-                      },
-                      timeLabelTextStyle: TextStyle(fontSize: 0),
-                      barHeight: 2,
-                      thumbColor: orange,
-                      progressBarColor: Colors.white,
-                    )),
-                Text(
-                  formatTime(_playerStateWatcher.duration),
-                  style: const TextStyle(fontSize: 11),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    formatTime(_playerStateWatcher.position),
+                    style: const TextStyle(fontSize: 11),
+                  ),
+                  SizedBox(
+                      width: .75 * _screenW,
+                      child: ProgressBar(
+                        progress: _playerStateWatcher.position,
+                        total: _playerStateWatcher.duration,
+                        onSeek: (v) {
+                          _playerStateReader.player.seek(v);
+                        },
+                        timeLabelTextStyle: TextStyle(fontSize: 0),
+                        barHeight: 2,
+                        thumbColor: orange,
+                        progressBarColor: Colors.white,
+                      )),
+                  Text(
+                    formatTime(_playerStateWatcher.duration),
+                    style: const TextStyle(fontSize: 11),
+                  ),
+                ],
+              ),
             ),
           ]),
         ],

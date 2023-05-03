@@ -26,7 +26,10 @@ class _TrackItemState extends State<TrackItem> {
     String artist = playlist[index].artist != null
         ? playlist[index].artist!
         : "Unknown artist";
+
+    double screenW = MediaQuery.of(context).size.width;
     return Card(
+      color: Color.fromRGBO(11, 11, 11, 1),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child:
@@ -39,47 +42,52 @@ class _TrackItemState extends State<TrackItem> {
                     ? orange
                     : Colors.white70,
               )),
-          InkWell(
-            borderRadius: BorderRadius.circular(10),
-            onTap: () {
-              _playerState.setCurrIndex(index);
-              //_playerStateWatcher.setCurrTrack(playlist[index]);
-              if (!_playerState.useCurrPlaylist &&
-                  _playerState.currPlaylist != _playerState.playlist) {
-                //Playing tracks from songs tab AKA all tracks
-                _playerState.setCurrPlaylist(_playerState.playlist);
-              } else {
-                _playerState.player.seek(Duration.zero, index: index);
-              }
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 220,
-                  height: 22,
-                  child: Text(
-                    playlist[index].title,
-                    style: const TextStyle(
-                        fontSize: 17, fontWeight: FontWeight.w500),
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: false,
-                  ),
-                ),
-                SizedBox(
-                  width: 220,
-                  height: 18,
-                  child: Text(
-                    artist,
-                    style: const TextStyle(
-                      fontSize: 14,
+          Container(
+            margin: EdgeInsets.only(left: 15),
+            width: .75 * screenW,// 320 on 411,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+
+              onTap: () {
+                _playerState.setCurrIndex(index);
+                //_playerStateWatcher.setCurrTrack(playlist[index]);
+                if (!_playerState.useCurrPlaylist &&
+                    _playerState.currPlaylist != _playerState.playlist) {
+                  //Playing tracks from songs tab AKA all tracks
+                  _playerState.setCurrPlaylist(_playerState.playlist);
+                } else {
+                  _playerState.player.seek(Duration.zero, index: index);
+                }
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: .77*screenW,
+                    height: 22,
+                    child: Text(
+                      playlist[index].title,
+                      style: const TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.w500),
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: false,
                   ),
-                ),
-              ],
+                  SizedBox(
+                    width: .77*screenW,
+                    height: 18,
+                    child: Text(
+                      artist,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           SizedBox(

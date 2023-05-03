@@ -17,15 +17,32 @@ Widget T_Marquee(text,
   );
 }
 
-Widget SizedText(String txt, TextStyle style, {double h = 22, double w = 250}) {
-  return SizedBox(
-    width: w,
-    height: h,
-    child: Text(
-      txt,
-      style: style,
-      overflow: TextOverflow.ellipsis,
-      softWrap: false,
-    ),
-  );
+class SizedText extends StatefulWidget {
+
+  String txt;
+  TextStyle style;
+  double h;
+  double w;
+
+   SizedText({Key? key, required this.txt, required this.style, this.h = 22, required this.w}) : super(key: key);
+
+  @override
+  State<SizedText> createState() => _SizedTextState();
 }
+
+class _SizedTextState extends State<SizedText> {
+  @override
+  Widget build(BuildContext context) {
+    return  SizedBox(
+      width: widget.w,
+      height: widget.h,
+      child: Text(
+       widget. txt,
+        style: widget.style,
+        overflow: TextOverflow.ellipsis,
+        softWrap: false,
+      ),
+    );
+  }
+}
+
