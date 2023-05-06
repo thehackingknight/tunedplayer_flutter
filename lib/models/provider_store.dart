@@ -70,9 +70,13 @@ class TPlayerState extends ChangeNotifier {
     }
 
     // Play track when user changes the track even when the player was paused
+
     if (_hasPlayed && !_player.playing) _player.play();
     notifyListeners();
   }
+
+
+  /*------------------------------------------------------------------------------------*/
 
   TrackSchema? _currTrack;
   TrackSchema? get currTrack => _currTrack;
@@ -80,6 +84,19 @@ class TPlayerState extends ChangeNotifier {
     _currTrack = val;
     notifyListeners();
   }
+
+  /*------------------------------------------------------------------------------------*/
+
+  /*------------------------------------------------------------------------------------*/
+
+  AlbumModel? _currAlbum;
+  AlbumModel? get currAlbum => _currAlbum;
+  void setCurrAlbum(AlbumModel val) {
+    _currAlbum = val;
+    notifyListeners();
+  }
+
+  /*------------------------------------------------------------------------------------*/
 
   List<TrackSchema> _playlist = List.empty();
   List<TrackSchema> get playlist => _playlist;

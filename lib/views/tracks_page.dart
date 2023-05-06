@@ -112,6 +112,10 @@ class _TracksTabState extends State<TracksTab> {
                           index: index, playlist: _playerState.playlist);
                     })),
               ),
+            ),
+            /*---------------Bottom spacer----------------*/
+            const SizedBox(
+              height: 54,
             )
           ],
         ));

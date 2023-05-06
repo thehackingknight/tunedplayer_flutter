@@ -22,3 +22,9 @@ h List all available interactive commands.
 d Detach (terminate "flutter run" but leave application running).
 c Clear the screen
 q Quit (terminate the application on the device).
+
+# What's next?
+
+    - Db for playlists, favorites, and recently played
+    - Add to playlist functionality
+    - Options menus

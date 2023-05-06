@@ -7,7 +7,7 @@ const TAG = "tunedplayer: ";
 const orange = Color.fromRGBO(255, 106, 6, 1);
 const orange_2 = Color.fromRGBO(255, 134, 54, 0.979);
 
-void print(msg) {
+void tprint(msg) {
   debugPrint("$TAG $msg");
 }
 
@@ -20,8 +20,8 @@ String formatTime(Duration duration) {
 
 double calcSize(double size, double max) {
   var percentage = (size / max);
-  print(max);
-  print(percentage);
+  tprint(max);
+  tprint(percentage);
 
   return max * percentage;
 }

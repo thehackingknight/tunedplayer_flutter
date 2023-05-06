@@ -6,9 +6,9 @@ Widget T_Marquee(text,
     FontWeight fw = FontWeight.w500,
     double h = 30,
     double w = 228}) {
-  return SizedBox(
-    width: w,
-    height: h,
+  return FractionallySizedBox(
+    widthFactor: w,
+    heightFactor: h,
     child: Marquee(
       text: text,
       velocity: 10,

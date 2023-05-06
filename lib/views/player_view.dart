@@ -28,13 +28,10 @@ class _PlayerViewState extends State<PlayerView> {
   late TPlayerState _playerStateReader;
   late TPlayerState _playerStateWatcher;
 
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _playerStateReader = context.read<TPlayerState>();
-
 
   }
 
@@ -43,23 +40,51 @@ class _PlayerViewState extends State<PlayerView> {
     var winW = MediaQuery.of(context).size.width;
     var winH = MediaQuery.of(context).size.height;
     _playerStateWatcher = context.watch<TPlayerState>();
+    var currRoute = ModalRoute.of(context)?.settings.name;
     //aFTER BUILD
 
     return !_playerStateWatcher.useCurrPlaylist ? Positioned(
-      bottom: 50,
+      bottom: currRoute == '/' ? 50 : 0,
       height: 60,
       width: winW,
-      child: Card(
-        color: const Color.fromRGBO(11, 11, 11, 1),
-        borderOnForeground: true,
-        child: MinPlayer(),
+      child: Scaffold(
+        body: Stack(
+          children: [
+
+            Container(
+              margin: const EdgeInsets.only(left: 4, right: 4),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Color.fromRGBO(50, 50, 50, 1),
+                ),
+                borderRadius: BorderRadius.circular(4),
+                color: Color.fromRGBO(20, 20, 20, 1),
+              ),child: MinPlayer(),
+            ),Positioned(
+                top: -10,
+                left: 5,
+                child: SizedBox(
+                    width: winW - 10,
+                    child: ProgressBar(
+                      progress: _playerStateWatcher.position,
+                      total: _playerStateWatcher.duration,
+                      onSeek: (v) {
+                        _playerStateReader.player.seek(v);
+                      },
+                      timeLabelTextStyle: TextStyle(fontSize: 0),
+                      barHeight: 2,
+                      thumbColor: Colors.transparent,
+                      progressBarColor: Colors.white,
+                    )),
+            )],
+        ),
       ),
     ) : Container();
   }
 
   Widget MinPlayer() {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -68,7 +93,7 @@ class _PlayerViewState extends State<PlayerView> {
               _playerStateReader
                   .setIsMinPlayer(!_playerStateWatcher.isMinPlayer);
               showModalBottomSheet(
-                  context: context, builder: (context) => FullPlayer());
+                  context: context, builder: (context) => const FullPlayer());
             },
             child: _playerStateWatcher.currTrack != null
                 ? Column(
@@ -93,9 +118,9 @@ class _PlayerViewState extends State<PlayerView> {
                   _playerStateWatcher.isPlaying
                       ? _playerStateWatcher.player.pause()
                       : _playerStateWatcher.player.play().then((value) {
-                          print("Playin");
+                          tprint("Playin");
                         }).catchError((err) {
-                          print("PlayError");
+                          tprint("PlayError");
                         });
                 },
                 icon: _playerStateWatcher.isPlaying

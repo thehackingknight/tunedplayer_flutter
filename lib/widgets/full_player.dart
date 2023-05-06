@@ -21,6 +21,7 @@ class _FullPlayerState extends State<FullPlayer> {
   Widget build(BuildContext context) {
     _playerStateReader = context.read<TPlayerState>();
     _playerStateWatcher = context.watch<TPlayerState>();
+    var _player = _playerStateWatcher.player;
     double _screenW = MediaQuery.of(context).size.width;
     return Container(
       color: Colors.black26,
@@ -89,17 +90,19 @@ class _FullPlayerState extends State<FullPlayer> {
                     size: 18,
                   )),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _player.seekToPrevious();
+                  },
                   icon: const Icon(CupertinoIcons.chevron_back)),
               IconButton(
                 iconSize: 40,
                 onPressed: () {
                   _playerStateWatcher.isPlaying
-                      ? _playerStateWatcher.player.pause()
-                      : _playerStateWatcher.player.play().then((value) {
-                          print("Playin");
+                      ? _player.pause()
+                      : _player.play().then((value) {
+                          tprint("Playin");
                         }).catchError((err) {
-                          print("PlayError");
+                          tprint("PlayError");
                         });
                 },
                 icon: _playerStateWatcher.isPlaying
@@ -107,7 +110,9 @@ class _FullPlayerState extends State<FullPlayer> {
                     : const Icon(CupertinoIcons.play),
               ),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _player.seekToNext();
+                  },
                   icon: const Icon(CupertinoIcons.chevron_forward)),
               IconButton(
                   onPressed: () {},

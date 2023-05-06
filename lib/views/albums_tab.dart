@@ -55,7 +55,7 @@ class _AlbumsTabState extends State<AlbumsTab> {
     ) : NotificationListener(
       onNotification: (SizeChangedLayoutNotification notification) {
         Future.delayed(const Duration(milliseconds: 300), () {
-          print('size changed');
+          tprint('size changed');
           var screenW = MediaQuery.of(context).size.width;
           context.read<AppState>().setScreenWidth(screenW);
         });
@@ -83,18 +83,12 @@ class _AlbumsTabState extends State<AlbumsTab> {
                     var album = _playerState.albums[index];
                     return Wrap(children: [
                       Container(
-                        color: Colors.black26,
+                        //color: Colors.black26,
                         //height: 200,
                         child: InkWell(
                           onTap: () {
-                            _playerState.setUseCurrPlaylist(true);
-                            showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlbumTracks(album: album);
-                                    })
-                                .whenComplete(() =>
-                                    _playerState.setUseCurrPlaylist(false));
+                            _playerState.setCurrAlbum(album);
+                            Navigator.of(context).pushNamed("/album-tracks");
                           },
                           child: Column(
                             children: [
@@ -103,7 +97,7 @@ class _AlbumsTabState extends State<AlbumsTab> {
                                 height: imgWidth,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(4),
-                                    color: Colors.black),
+                                    color: Colors.black26),
                                 child: const Icon(CupertinoIcons.music_albums, size: 50,),
                                 // child: Image.asset("assets/images/pistol.jpg"),
                               ),

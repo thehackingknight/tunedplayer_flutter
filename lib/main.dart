@@ -4,9 +4,11 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:tunedplayer/models/provider_store.dart';
+import 'package:tunedplayer/views/home_page.dart';
 import 'package:tunedplayer/views/library_page.dart';
 import 'package:tunedplayer/views/player_view.dart';
 import 'package:tunedplayer/views/test_app.dart';
+import 'package:tunedplayer/widgets/album_tracks.dart';
 import 'package:tunedplayer/widgets/navmenu.dart';
 import 'constants/index.dart';
 import "constants/globals.dart" as globals;
@@ -46,7 +48,7 @@ class _RootState extends State<Root> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _playerState.player.playerStateStream.listen((state) {
           _playerState.setIsPlaying(state.playing);
-
+          tprint(ModalRoute.of(context)?.settings.name);
           // If the player is not currently playing
           if (!_playerState.hasPlayed && state.playing) _playerState.setHasPlayed(true);
       });
@@ -74,15 +76,24 @@ class _RootState extends State<Root> {
     _playerState = context.watch<TPlayerState>();
     return MaterialApp(
       theme: ThemeData.dark(useMaterial3: true),
-      home: Stack(
-        children: const [
-          MyApp(),
-          PlayerView(),
-        ],
-      ),
+      routes: {
+        '/': (context) => TRoute( const MyApp()),
+        "/album-tracks" : (context) => TRoute(const AlbumTracks())
+      },
+      initialRoute: '/',
     );
   }
 }
+
+Widget TRoute(Widget child){
+  return Stack(
+    children: [
+      child,
+      const PlayerView()
+    ],
+  );
+}
+
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -96,7 +107,7 @@ class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
   final double _iconSize = 20;
   final List<Widget> _mainPages = [const HomePage(), const LibraryPage()];
-  bool _deviceFiles = true;
+  bool _online = false;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -108,10 +119,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     final _playerState = context.watch<TPlayerState>();
     double screenW = MediaQuery.of(context).size.width;
-    return MaterialApp(
-        title: 'TunedPlayer',
-        theme: ThemeData.dark(useMaterial3: true),
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -127,19 +135,19 @@ class _MyAppState extends State<MyApp> {
                   Row(
                     children: [
                       const Text(
-                        "device files",
-                        style: TextStyle(fontSize: 16),
+                        "Online",
+                        style: TextStyle(fontSize: 18),
                       ),
                       SizedBox(
                         width: 35,
-                        height: 25,
+                        height: 30,
                         child: FittedBox(
                           fit: BoxFit.fill,
                           child: Switch(
-                            value: _deviceFiles,
+                            value: _online,
                             onChanged: (bool val) {
                               setState(() {
-                                _deviceFiles = val;
+                                _online = val;
                               });
                             },
                             activeColor: orange,
@@ -148,7 +156,6 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ],
                   ),
-                  Text( screenW.floor().toString()),
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(CupertinoIcons.ellipsis_vertical),
@@ -193,46 +200,10 @@ class _MyAppState extends State<MyApp> {
                         },
                         icon: const Icon(CupertinoIcons.info)),
                   ],
-                ))));
+                )));
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        child: Text("TunedPlayer"),
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) => const Center(
-              child: Text("Menu"),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
 
 class FirstRoute extends StatelessWidget {
   const FirstRoute({super.key});

@@ -50,41 +50,29 @@ class _TrackItemState extends State<TrackItem> {
 
               onTap: () {
                 _playerState.setCurrIndex(index);
-                //_playerStateWatcher.setCurrTrack(playlist[index]);
-                if (!_playerState.useCurrPlaylist &&
-                    _playerState.currPlaylist != _playerState.playlist) {
-                  //Playing tracks from songs tab AKA all tracks
-                  _playerState.setCurrPlaylist(_playerState.playlist);
-                } else {
                   _playerState.player.seek(Duration.zero, index: index);
-                }
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: .77*screenW,
-                    height: 22,
+                  Container(
                     child: Text(
-                      playlist[index].title,
+              playlist[index].title,
                       style: const TextStyle(
                           fontSize: 17, fontWeight: FontWeight.w500),
-                      overflow: TextOverflow.ellipsis,
+                      overflow: TextOverflow.fade,
+
                       softWrap: false,
                     ),
                   ),
-                  SizedBox(
-                    width: .77*screenW,
-                    height: 18,
-                    child: Text(
-                      artist,
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
+                  Text(
+                    artist,
+                    style: const TextStyle(
+                      fontSize: 14,
                     ),
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
                   ),
                 ],
               ),
