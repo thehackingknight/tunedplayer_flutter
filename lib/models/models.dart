@@ -1,6 +1,6 @@
 import 'package:isar/isar.dart';
 
-part 'models.g.dart';
+//part 'models.g.dart';
 
 @collection
 class User {

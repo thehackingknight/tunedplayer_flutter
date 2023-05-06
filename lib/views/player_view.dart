@@ -28,60 +28,6 @@ class _PlayerViewState extends State<PlayerView> {
   late TPlayerState _playerStateReader;
   late TPlayerState _playerStateWatcher;
 
-  final _audioQuery = OnAudioQuery();
-  final List<AudioSource> _children = List.empty(growable: true);
-  late ConcatenatingAudioSource audioPlaylist;
-
-  void getTracks() async {
-    List<TrackSchema> playlist = List.empty(growable: true);
-    var res = await _audioQuery.querySongs();
-    debugPrint("$TAG SONGS QUERIED");
-    for (var it in res) {
-      TrackSchema track = TrackSchema(
-          title: it.title,
-          artist: it.artist,
-          album: it.album,
-          albumId: it.albumId,
-          path: it.uri,
-          id: it.id);
-      playlist.add(track);
-
-      AudioSource audioSource = AudioSource.uri(
-        Uri.parse(it.uri!),
-        tag: MediaItem(
-          // Specify a unique ID for each media item:
-          id: it.id.toString(),
-          // Metadata to display in the notification:
-          album: it.album,
-          title: it.title,
-          artUri: Uri.parse(dummyImg),
-        ),
-      );
-      _children.add(audioSource);
-    }
-
-    if (_children.isNotEmpty) {
-      audioPlaylist = ConcatenatingAudioSource(
-        // Start loading next item just before reaching it
-        useLazyPreparation: true,
-        // Customise the shuffle algorithm
-        shuffleOrder: DefaultShuffleOrder(),
-        // Specify the playlist items
-        children: _children,
-      );
-
-      _playerStateWatcher.setPlaylist(playlist);
-      _playerStateWatcher.setCurrPlaylist(playlist);
-
-      if (Platform.isAndroid &&
-          _playerStateWatcher.player.audioSource == null) {}
-    }
-  }
-
-  void getAlbums() async {
-    var albums = await _audioQuery.queryAlbums();
-    _playerStateReader.setAlbums(albums);
-  }
 
   @override
   void initState() {
@@ -89,15 +35,7 @@ class _PlayerViewState extends State<PlayerView> {
     super.initState();
     _playerStateReader = context.read<TPlayerState>();
 
-    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
-      if (_playerStateWatcher.currTrack == null) {
-        _playerStateReader.setCurrTrack(
-            TrackSchema(title: "Hanah", artist: "Tonics", album: "Single"));
-      }
 
-      getTracks();
-      getAlbums();
-    });
   }
 
   @override

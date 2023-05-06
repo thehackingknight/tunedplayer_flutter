@@ -48,6 +48,16 @@ class TPlayerState extends ChangeNotifier {
     notifyListeners();
   }
 
+  /**********************************************/
+  bool _hasPlayed = false;
+  bool get hasPlayed => _hasPlayed;
+  void setHasPlayed(bool val) {
+    _hasPlayed = val;
+    notifyListeners();
+  }
+
+  /**********************************************/
+
   int _currIndex = 0;
   int get currIndex => _currIndex;
   void setCurrIndex(int val) {
@@ -58,7 +68,9 @@ class TPlayerState extends ChangeNotifier {
     if (_player.currentIndex != val) {
       _player.seek(Duration.zero, index: val);
     }
-    if (val != 0 && !_player.playing) _player.play();
+
+    // Play track when user changes the track even when the player was paused
+    if (_hasPlayed && !_player.playing) _player.play();
     notifyListeners();
   }
 

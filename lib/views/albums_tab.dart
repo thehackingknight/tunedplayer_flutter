@@ -19,26 +19,42 @@ class AlbumsTab extends StatefulWidget {
 }
 
 class _AlbumsTabState extends State<AlbumsTab> {
+  late TPlayerState _playerState;
+  void getAlbums() async {
+    var albums = await audioQuery.queryAlbums();
+    _playerState.setAlbums(albums);
+  }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
+    getAlbums();
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       var screenW = MediaQuery.of(context).size.width;
       context.read<AppState>().setScreenWidth(screenW);
+
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final TPlayerState _playerState = context.watch();
+    _playerState = context.watch();
     final AppState _appState = context.watch();
 
     const numGrids = 10;
     const numRows = 3;
-    return NotificationListener(
+    return _playerState.albums.isEmpty ? Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const[
+         Icon(CupertinoIcons.music_albums, size: 100,),
+        SizedBox(
+          height: 5,
+        ),
+        Text("EMPTY", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, letterSpacing: 5),)
+      ],
+    ) : NotificationListener(
       onNotification: (SizeChangedLayoutNotification notification) {
-        Future.delayed(Duration(milliseconds: 300), () {
+        Future.delayed(const Duration(milliseconds: 300), () {
           print('size changed');
           var screenW = MediaQuery.of(context).size.width;
           context.read<AppState>().setScreenWidth(screenW);
@@ -102,7 +118,7 @@ class _AlbumsTabState extends State<AlbumsTab> {
                                             fontSize: 16),
                                     w: 250),
                                     SizedText(
-                                       txt: album.artist!, style: TextStyle(), w: 250)// TODO
+                                       txt: album.artist!, style: const TextStyle(), w: 250)// TODO
                                   ],
                                 ),
                               ),

@@ -42,14 +42,13 @@ class _RootState extends State<Root> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _playerState.player.playerStateStream.listen((state) {
-        debugPrint("$TAG: STATE: $state");
-        setState(() {
           _playerState.setIsPlaying(state.playing);
-        });
+
+          // If the player is not currently playing
+          if (!_playerState.hasPlayed && state.playing) _playerState.setHasPlayed(true);
       });
       _playerState.player.durationStream.listen((val) {
         if (val != null) {

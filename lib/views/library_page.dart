@@ -35,7 +35,7 @@ class _LibraryPageState extends State<LibraryPage> {
           toolbarHeight: 0,
         ),
         body: const TabBarView(children: [
-          Tracks(),
+          TracksTab(),
           AlbumsTab(),
           Text("Artists"),
           Text("Playlists"),
